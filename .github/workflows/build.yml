@@ -23,16 +23,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-          pip install --user --upgrade buildozer cython virtualenv setuptools
+          # Correction CRITIQUE : On force une version stable de setuptools pour éviter le crash
+          pip install --user --upgrade "setuptools<66.0" buildozer "cython<3.0" virtualenv
 
       - name: 4. Compilation avec Buildozer (NDK 25b)
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Commande automatique pour accepter toutes les licences SDK
+          # Le "yes |" répond automatiquement aux licences Android
           yes | buildozer android debug
 
-      - name: 5. Publication de l'artefact (Fichier APK)
+      - name: 5. Publication de l'APK final (Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: OussamaSat-App-Final
+          name: OussamaSat-App-Pro
           path: bin/*.apk
