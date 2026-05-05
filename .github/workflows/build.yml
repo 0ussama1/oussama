@@ -1,4 +1,4 @@
-name: Build APK Stable OussamaSat
+name: Build APK OussamaSat Final
 
 on:
   push:
@@ -9,18 +9,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Récupération du code
+      - name: 1. Code source
         uses: actions/checkout@v4
 
-      - name: 2. Build avec Docker (Solution Radical)
-        uses: jamescurtin/buildozer-action@v1
+      - name: 2. Setup Python
+        uses: actions/setup-python@v5
         with:
-          buildozer_version: stable
-          command: buildozer android debug
-          repository_display_name: "OussamaSat"
+          python-version: '3.10'
 
-      - name: 3. Téléchargement de l'APK
+      - name: 3. Installation Outils (Sûr)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev zlib1g-dev
+          pip install --user --upgrade "setuptools<66.0" "cython<3.0" buildozer virtualenv
+
+      - name: 4. Build APK (Manuel)
+        run: |
+          export PATH=$PATH:$HOME/.local/bin
+          # Accepter les licences et compiler
+          yes | buildozer android debug
+
+      - name: 5. Envoyer APK
         uses: actions/upload-artifact@v4
         with:
-          name: OussamaSat-Final-APK
+          name: APK-OussamaSat
           path: bin/*.apk
