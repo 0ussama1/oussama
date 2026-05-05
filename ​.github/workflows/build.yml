@@ -26,7 +26,6 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # هذا الأمر يقوم بالموافقة تلقائياً على شروط الأندرويد وبناء التطبيق
           yes | buildozer android debug
         
       - name: Upload APK
