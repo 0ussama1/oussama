@@ -1,4 +1,4 @@
-name: Build APK Professionnel OussamaSat
+name: Build APK Stable OussamaSat
 
 on:
   push:
@@ -7,33 +7,20 @@ on:
 
 jobs:
   build:
-    name: Compilation de l'application Android
     runs-on: ubuntu-latest
-
     steps:
-      - name: 1. Récupération du code source
+      - name: 1. Récupération du code
         uses: actions/checkout@v4
 
-      - name: 2. Configuration de Python 3.11
-        uses: actions/setup-python@v5
+      - name: 2. Build avec Docker (Solution Radical)
+        uses: jamescurtin/buildozer-action@v1
         with:
-          python-version: '3.11'
+          buildozer_version: stable
+          command: buildozer android debug
+          repository_display_name: "OussamaSat"
 
-      - name: 3. Installation des dépendances du système
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-          # Correction CRITIQUE : On force une version stable de setuptools pour éviter le crash
-          pip install --user --upgrade "setuptools<66.0" buildozer "cython<3.0" virtualenv
-
-      - name: 4. Compilation avec Buildozer (NDK 25b)
-        run: |
-          export PATH=$PATH:$HOME/.local/bin
-          # Le "yes |" répond automatiquement aux licences Android
-          yes | buildozer android debug
-
-      - name: 5. Publication de l'APK final (Artifact)
+      - name: 3. Téléchargement de l'APK
         uses: actions/upload-artifact@v4
         with:
-          name: OussamaSat-App-Pro
+          name: OussamaSat-Final-APK
           path: bin/*.apk
