@@ -1,20 +1,22 @@
 name: Build APK
+
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
       - name: Build with Buildozer
-        uses: ArtemSerebrennkov/buildozer-action@v1
+        uses: ArtemSerebrennikov/buildozer-action@v1
         with:
-          python_version: 3.8
+          workdir: .
           buildozer_version: master
-          buildozer_config: buildozer.spec
+
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: OussamaSat-APK
           path: bin/*.apk
-
