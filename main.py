@@ -38,7 +38,7 @@ MDScreen:
             orientation: "vertical"
             padding: "15dp"
             size_hint: 1, None
-            height: "90dp"
+            height: "100dp"
             md_bg_color: 0.1, 0.1, 0.1, 1
             radius: [15,]
 
@@ -126,7 +126,6 @@ class OussamaSatApp(MDApp):
         return Builder.load_string(KV)
 
     def on_start(self):
-        # Lancement du moteur de détection intelligent en arrière-plan
         threading.Thread(target=self.moteur_capteur_intelligent, daemon=True).start()
 
     def moteur_capteur_intelligent(self):
@@ -134,15 +133,12 @@ class OussamaSatApp(MDApp):
         while True:
             trouve = False
             nom_port = None
-
             if self.est_android:
-                # Détection des périphériques USB sur Android
                 liste_peripheriques_usb = usb.get_usb_device_list()
                 if liste_peripheriques_usb:
                     nom_port = liste_peripheriques_usb[0].getDeviceName()
                     trouve = True
             else:
-                # Détection sur PC (pour test)
                 import serial.tools.list_ports
                 ports = list(serial.tools.list_ports.comports())
                 if ports:
@@ -157,7 +153,6 @@ class OussamaSatApp(MDApp):
                     self.port_actif = None
                     Clock.schedule_once(lambda dt: self.ui_deconnecte())
                 deja_trouve = trouve
-            
             time.sleep(1)
 
     def ui_connecte(self):
@@ -168,7 +163,7 @@ class OussamaSatApp(MDApp):
         self.anim_pulsation = Animation(opacity=0.3, duration=0.6) + Animation(opacity=1, duration=0.6)
         self.anim_pulsation.repeat = True
         self.anim_pulsation.start(led)
-        lbl.text = f"IA: Connecté (OTG Détecté)"
+        lbl.text = "IA: Connecté (OTG Détecté)"
         lbl.text_color = (0, 0.8, 0.4, 1)
         btn.disabled = False
         btn.md_bg_color = (0, 0.5, 0.3, 1)
@@ -204,7 +199,6 @@ class OussamaSatApp(MDApp):
             with open(self.fichier_selectionne, "rb") as f:
                 donnees = f.read()
             
-            # Ouverture du port selon le système
             if self.est_android:
                 peripherique = usb.get_usb_device_list()[0]
                 ser = serial4a.get_serial_port(peripherique.getDeviceName(), 115200, 8, 'N', 1, timeout=1)
@@ -214,7 +208,7 @@ class OussamaSatApp(MDApp):
             if not ser.is_open: ser.open()
             
             total = len(donnees)
-            bloc = 1024 # Petit paquet pour la stabilité OTG
+            bloc = 1024
             for i in range(0, total, bloc):
                 ser.write(donnees[i:i+bloc])
                 progression = int((i/total)*100)
@@ -234,4 +228,3 @@ class OussamaSatApp(MDApp):
 
 if __name__ == "__main__":
     OussamaSatApp().run()
-
