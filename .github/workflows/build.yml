@@ -19,21 +19,15 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 3. Gestion du Cache (Gain de temps)
-        uses: actions/cache@v4
-        with:
-          path: .buildozer
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
-
-      - name: 4. Compilation avec Buildozer (NDK 25b)
-        # Utilisation d'une action stable pour éviter les erreurs de licence
+      - name: 3. Compilation avec Buildozer
+        # Correction de la casse : ArtemSerebriakov (avec A et S majuscules)
         uses: ArtemSerebriakov/buildozer-action@v1
         with:
           buildozer_version: master
           command: buildozer android debug
-          repository_display_name: "OUSSAMA_SAT_PRO"
+          repository_display_name: "OussamaSat"
 
-      - name: 5. Publication du fichier APK final
+      - name: 4. Publication du fichier APK final
         uses: actions/upload-artifact@v4
         with:
           name: OussamaSat-Application-Pro
