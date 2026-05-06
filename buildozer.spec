@@ -6,13 +6,13 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
-# المكتبات بدون تحديد نسخ لتجنب التعارض
-requirements = python3, kivy, kivymd, pyserial, plyer, usb4a, usbserial4a
+# المتطلبات الأساسية فقط لضمان مرور البناء
+requirements = python3, kivy==2.2.1, kivymd==1.1.1, pyserial, plyer, usb4a, usbserial4a
 
 orientation = portrait
-android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, USB_PERMISSION, INTERNET
+android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, USB_PERMISSION
 
-# استخدام API 31 لأنه الأكثر استقراراً حالياً
+# استخدام API 31 لضمان استقرار التحميل
 android.api = 31
 android.minapi = 21
 android.ndk = 25b
