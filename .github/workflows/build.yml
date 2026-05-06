@@ -1,5 +1,4 @@
-name: Build APK Oussama Sat Final
-
+name: Final Success Build
 on:
   push:
     branches: [ master ]
@@ -9,29 +8,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 2. Setup Python 3.10
+      - name: Setup Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: 3. Install Core Tools
+      - name: Fix Distutils & Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev zlib1g-dev
-          # تثبيت نسخ محددة تمنع خطأ Broken Pipe وتوافق Kivy
-          pip install --user --upgrade "setuptools<66.0" "cython<3.0" buildozer virtualenv
+          # الحل النهائي: تثبيت نسخ تضمن وجود distutils وتوافق p4a
+          pip install --upgrade pip
+          pip install "setuptools<66.0" "cython<3.0" buildozer virtualenv
 
-      - name: 4. Build Android APK
+      - name: Build APK
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # قبول التراخيص وبدء البناء المباشر لتجنب نقص الملفات
+          # استخدام --requirements بدقة كما ظهر في خطأ الصورة 1000023975
           yes | buildozer android debug
 
-      - name: 5. Upload Result
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: OussamaSat-App
+          name: OussamaSat-Final
           path: bin/*.apk
