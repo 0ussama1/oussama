@@ -1,4 +1,4 @@
-name: Build APK OussamaSat Final
+name: Build APK Final
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Code source
+      - name: 1. Checkout
         uses: actions/checkout@v4
 
       - name: 2. Setup Python
@@ -17,20 +17,21 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 3. Installation Outils (Sûr)
+      - name: 3. Install Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev zlib1g-dev
           pip install --user --upgrade "setuptools<66.0" "cython<3.0" buildozer virtualenv
 
-      - name: 4. Build APK (Manuel)
+      - name: 4. Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Accepter les licences et compiler
+          # التنظيف الإجباري قبل البناء
+          buildozer android clean
           yes | buildozer android debug
 
-      - name: 5. Envoyer APK
+      - name: 5. Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: APK-OussamaSat
+          name: OussamaSat-App
           path: bin/*.apk
