@@ -6,13 +6,13 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
 
-# المتطلبات الأساسية فقط
-requirements = python3, kivy==2.2.1, kivymd==1.1.1, pyserial, plyer, usb4a, usbserial4a
+# تم حذف أرقام النسخ هنا لحل مشكلة فشل الـ toolchain الأخيرة
+requirements = python3, kivy, kivymd, pyserial, plyer, usb4a, usbserial4a
 
 orientation = portrait
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, USB_PERMISSION
 
-# استخدام API 31 لضمان استقرار التحميل
+# استخدام API 31 (أندرويد 12) لضمان استقرار تعريفات الـ USB والـ OTG
 android.api = 31
 android.minapi = 21
 android.ndk = 25b
