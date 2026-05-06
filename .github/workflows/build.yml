@@ -1,4 +1,4 @@
-name: Final Success Build
+name: OussamaSat Emergency Build
 on:
   push:
     branches: [ master ]
@@ -6,31 +6,36 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # استخدام نسخة مستقرة من أوبنتو
     steps:
       - uses: actions/checkout@v4
+
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
 
       - name: Setup Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Fix Distutils & Tools
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev zlib1g-dev
-          # الحل النهائي: تثبيت نسخ تضمن وجود distutils وتوافق p4a
-          pip install --upgrade pip
-          pip install "setuptools<66.0" "cython<3.0" buildozer virtualenv
+          sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev zlib1g-dev libgstreamer1.0-dev
 
-      - name: Build APK
+      - name: Install Build Tools
+        run: |
+          pip install --upgrade pip
+          # تقييد النسخ هو سر النجاح هنا
+          pip install "setuptools<66.0" "cython<3.0" "wheel"
+          pip install buildozer
+
+      - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # استخدام --requirements بدقة كما ظهر في خطأ الصورة 1000023975
+          # مسح أي بقايا قديمة قبل البدء
+          buildozer android clean
           yes | buildozer android debug
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: OussamaSat-Final
-          path: bin/*.apk
