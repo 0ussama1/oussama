@@ -6,43 +6,41 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4  # ترقية لـ v4
+        uses: actions/checkout@v4
 
       - name: Fix and Install Dependencies
         run: |
-          sudo apt-get clean
           sudo apt-get update
-          sudo apt-get install -y -f
-          sudo apt-get install -y libunwind-dev
-          sudo apt-get install -y \
+          sudo apt-get install -y --no-install-recommends \
             build-essential git python3-dev libsdl2-dev libsdl2-image-dev \
             libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev \
             libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev \
             gstreamer1.0-plugins-base gstreamer1.0-plugins-good libsqlite3-dev \
-            libssl-dev libffi-dev liblzma-dev
+            libssl-dev libffi-dev liblzma-dev libunwind-dev
 
       - name: Set up Python
-        uses: actions/setup-python@v5 # ترقية لـ v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install Buildozer
+      - name: Install Buildozer and Cython
         run: |
           pip install --upgrade pip
-          pip install Cython==0.29.33
+          pip install "Cython<3.0" 
           pip install buildozer
 
       - name: Build APK
         run: |
+          # تنظيف البناء القديم وبدء بناء جديد
+          buildozer android clean
           yes | buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "y"
 
       - name: Upload Result
-        uses: actions/upload-artifact@v4  # الإصلاح الأساسي هنا (الترقية لـ v4)
+        uses: actions/upload-artifact@v4
         with:
           name: Oussama-Boot-v3
           path: bin/*.apk
