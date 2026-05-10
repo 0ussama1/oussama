@@ -1,0 +1,66 @@
+name: Build Oussama Boot v3.0
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Server
+        uses: actions/checkout@v3
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          # حل مشكلة libunwind-dev و libgstreamer التي ظهرت في الخطأ
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            python3-dev \
+            ffmpeg \
+            libsdl2-dev \
+            libsdl2-image-dev \
+            libsdl2-mixer-dev \
+            libsdl2-ttf-dev \
+            libportmidi-dev \
+            libswscale-dev \
+            libavformat-dev \
+            libavcodec-dev \
+            zlib1g-dev \
+            libgstreamer1.0-dev \
+            gstreamer1.0-plugins-base \
+            gstreamer1.0-plugins-good \
+            libunwind-dev \
+            libsqlite3-dev \
+            sqlite3 \
+            bzip2 \
+            libbz2-dev \
+            libssl-dev \
+            openssl \
+            libffi-dev \
+            libgmp-dev \
+            liblzma-dev
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Buildozer
+        run: |
+          pip install --upgrade pip
+          pip install Cython==0.29.33
+          pip install buildozer
+
+      - name: Build with Buildozer
+        run: yes | buildozer -v android debug
+        env:
+          ACCEPT_SDK_LICENSE: "y"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: Oussama-Boot-v3-Debug
+          path: bin/*.apk
