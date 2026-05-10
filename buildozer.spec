@@ -6,7 +6,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json,txt
 version = 3.0
 
-# إضافة المكتبات اللازمة لـ KivyMD 2.0 و plyer و usb
+# تم تعديل التبعيات لضمان استقرار البناء مع النسخة الجديدة
 requirements = python3,kivy==2.3.0,https://github.com/kivymd/KivyMD/archive/master.zip,pillow,plyer,requests,certifi,urllib3
 
 orientation = portrait
