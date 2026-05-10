@@ -28,13 +28,12 @@ jobs:
       - name: Install Buildozer and Cython
         run: |
           pip install --upgrade pip
-          pip install "Cython<3.0" 
+          pip install "Cython<3.0"
           pip install buildozer
 
       - name: Build APK
         run: |
-          # تنظيف البناء القديم وبدء بناء جديد
-          buildozer android clean
+          # تم حذف أمر التنظيف (Clean) لتجنب خطأ FileNotFoundError
           yes | buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "y"
@@ -42,5 +41,5 @@ jobs:
       - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: Oussama-Boot-v3
+          name: Oussama-Boot-v3-APK
           path: bin/*.apk
