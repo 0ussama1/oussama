@@ -6,8 +6,8 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json,txt
 version = 3.0
 
-# تم تعديل التبعيات لضمان استقرار البناء مع النسخة الجديدة
-requirements = python3,kivy==2.3.0,https://github.com/kivymd/KivyMD/archive/master.zip,pillow,plyer,requests,certifi,urllib3
+# استخدام نسخ محددة بدقة لتجنب Broken pipe
+requirements = python3,kivy==2.3.0,https://github.com/kivymd/KivyMD/archive/master.zip,pillow,plyer,requests,certifi,urllib3,charset-normalizer,idna
 
 orientation = portrait
 fullscreen = 0
