@@ -33,14 +33,15 @@ jobs:
 
       - name: Build APK
         run: |
-          # مسح شامل لضمان عدم وجود ملفات مكسورة من المحاولات السابقة
+          # حذف شامل للمجلدات المؤقتة لضمان عدم وجود "مخلفات" مكسورة
           rm -rf .buildozer/
-          # تشغيل البناء باستخدام معالج واحد فقط لتجنب Broken pipe (أكثر استقراراً)
-          yes | buildozer -v android debug
+          rm -rf bin/
+          # بناء نسخة واحدة فقط (arm64-v8a) لتسريع العملية ومنع الـ Broken pipe
+          buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "y"
 
-      - name: Upload APK
+      - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
           name: Oussama-Boot-v3
