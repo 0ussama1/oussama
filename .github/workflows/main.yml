@@ -9,38 +9,23 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # ترقية لـ v4
 
       - name: Fix and Install Dependencies
         run: |
           sudo apt-get clean
           sudo apt-get update
-          # إصلاح التبعيات المكسورة وتثبيت libunwind مسبقاً لمنع خطأ الـ 27 ثانية
           sudo apt-get install -y -f
           sudo apt-get install -y libunwind-dev
           sudo apt-get install -y \
-            build-essential \
-            git \
-            python3-dev \
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            zlib1g-dev \
-            libgstreamer1.0-dev \
-            gstreamer1.0-plugins-base \
-            gstreamer1.0-plugins-good \
-            libsqlite3-dev \
-            libssl-dev \
-            libffi-dev \
-            liblzma-dev
+            build-essential git python3-dev libsdl2-dev libsdl2-image-dev \
+            libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev \
+            libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev \
+            gstreamer1.0-plugins-base gstreamer1.0-plugins-good libsqlite3-dev \
+            libssl-dev libffi-dev liblzma-dev
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # ترقية لـ v5
         with:
           python-version: '3.10'
 
@@ -52,13 +37,12 @@ jobs:
 
       - name: Build APK
         run: |
-          # قبول التراخيص تلقائياً لبدء البناء
           yes | buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "y"
 
       - name: Upload Result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # الإصلاح الأساسي هنا (الترقية لـ v4)
         with:
           name: Oussama-Boot-v3
           path: bin/*.apk
