@@ -1,0 +1,551 @@
+#:import dp kivy.metrics.dp
+
+MDNavigationLayout:
+    MDScreenManager:
+        id: screen_mgr
+
+        # ════ شاشة العمليات ═════════════════════
+        MDScreen:
+            name: "main"
+            md_bg_color: (0.03, 0.07, 0.12, 1)
+            MDBoxLayout:
+                orientation: "vertical"
+                MDTopAppBar:
+                    type: "small"
+                    headline_text: "OUSSAMA BOOT"
+                    md_bg_color: (0.03, 0.08, 0.14, 1)
+                    specific_text_color: (0, 0.9, 0.55, 1)
+                    MDTopAppBarLeadingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "satellite-variant"
+                            theme_icon_color: "Custom"
+                            icon_color: (0, 0.9, 0.55, 1)
+                    MDTopAppBarTrailingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "cog-outline"
+                            theme_icon_color: "Custom"
+                            icon_color: (0.5, 0.7, 0.9, 1)
+                            on_release: screen_mgr.current = "settings"
+
+                # شريط الحالة
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: dp(36)
+                    padding: [dp(14), dp(6)]
+                    spacing: dp(8)
+                    md_bg_color: (0.04, 0.1, 0.18, 1)
+                    MDIcon:
+                        id: ic_status
+                        icon: "circle-small"
+                        theme_icon_color: "Custom"
+                        icon_color: (0.5, 0.6, 0.7, 1)
+                        size_hint: None, None
+                        size: dp(20), dp(20)
+                    MDLabel:
+                        id: lbl_status
+                        text: "تهيئة..."
+                        font_style: "Label"
+                        role: "medium"
+                        theme_text_color: "Custom"
+                        text_color: (0.5, 0.7, 0.9, 1)
+                        adaptive_height: True
+                    MDBoxLayout:
+                        id: dot_usb
+                        size_hint: None, None
+                        size: dp(10), dp(10)
+                        radius: [dp(5)]
+                        md_bg_color: (0.25, 0.25, 0.25, 1)
+                        pos_hint: {"center_y": 0.5}
+                    MDLabel:
+                        id: lbl_port
+                        text: "—"
+                        font_style: "Label"
+                        role: "small"
+                        theme_text_color: "Hint"
+                        size_hint_x: None
+                        width: dp(120)
+                        halign: "right"
+                        shorten: True
+
+                MDScrollView:
+                    do_scroll_x: False
+                    bar_color: (0, 0.8, 0.5, 0.4)
+                    bar_width: 3
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        padding: dp(14)
+                        spacing: dp(10)
+                        adaptive_height: True
+
+                        # بطاقة الملف
+                        MDCard:
+                            id: card_firmware
+                            orientation: "vertical"
+                            padding: dp(14)
+                            spacing: dp(10)
+                            adaptive_height: True
+                            md_bg_color: (0.05, 0.1, 0.17, 1)
+                            radius: [dp(14)]
+                            elevation: 0
+                            line_color: (0.1, 0.25, 0.42, 1)
+                            line_width: 1
+                            MDBoxLayout:
+                                adaptive_height: True
+                                spacing: dp(8)
+                                MDLabel:
+                                    text: "ملف الفيرموير"
+                                    font_style: "Label"
+                                    role: "small"
+                                    theme_text_color: "Hint"
+                                    adaptive_height: True
+                                MDLabel:
+                                    id: lbl_receiver_detect
+                                    text: "🤖 —"
+                                    font_style: "Label"
+                                    role: "small"
+                                    theme_text_color: "Custom"
+                                    text_color: (0, 0.85, 0.5, 1)
+                                    adaptive_height: True
+                                    halign: "right"
+                            MDBoxLayout:
+                                spacing: dp(10)
+                                padding: [dp(10), dp(8)]
+                                adaptive_height: True
+                                md_bg_color: (0.02, 0.06, 0.1, 1)
+                                radius: [dp(10)]
+                                MDIcon:
+                                    icon: "file-code"
+                                    theme_icon_color: "Custom"
+                                    icon_color: (0.35, 0.5, 0.65, 1)
+                                    size_hint: None, None
+                                    size: dp(32), dp(32)
+                                MDBoxLayout:
+                                    orientation: "vertical"
+                                    adaptive_height: True
+                                    spacing: dp(2)
+                                    MDLabel:
+                                        id: lbl_firmware_name
+                                        text: "لم يتم اختيار ملف"
+                                        font_style: "Body"
+                                        role: "medium"
+                                        adaptive_height: True
+                                        shorten: True
+                                        shorten_from: "right"
+                                    MDLabel:
+                                        id: lbl_firmware_size
+                                        text: "—"
+                                        font_style: "Label"
+                                        role: "small"
+                                        theme_text_color: "Hint"
+                                        adaptive_height: True
+
+                        # صف 1: اختيار ملف + اتصال
+                        MDBoxLayout:
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(52)
+                            MDButton:
+                                style: "filled"
+                                theme_bg_color: "Custom"
+                                md_bg_color: (0.35, 0.12, 0.72, 1)
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.browse_firmware()
+                                MDButtonLeadingIcon:
+                                    icon: "folder-open"
+                                    theme_icon_color: "Custom"
+                                    icon_color: 1,1,1,1
+                                MDButtonText:
+                                    text: "اختيار ملف"
+                                    font_style: "Label"
+                                    role: "large"
+                                    theme_text_color: "Custom"
+                                    text_color: 1,1,1,1
+                            MDButton:
+                                id: btn_connect
+                                style: "outlined"
+                                theme_line_color: "Custom"
+                                line_color: (0, 0.75, 0.45, 1)
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.toggle_connect()
+                                MDButtonLeadingIcon:
+                                    icon: "usb"
+                                    theme_icon_color: "Custom"
+                                    icon_color: (0, 0.8, 0.45, 1)
+                                MDButtonText:
+                                    text: "اتصال"
+                                    font_style: "Label"
+                                    role: "large"
+                                    theme_text_color: "Custom"
+                                    text_color: (0, 0.85, 0.5, 1)
+
+                        # صف 2: Scan + Read + Erase
+                        MDBoxLayout:
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(52)
+                            MDButton:
+                                style: "tonal"
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.scan_usb()
+                                MDButtonLeadingIcon:
+                                    icon: "magnify"
+                                MDButtonText:
+                                    text: "Scan"
+                                    font_style: "Label"
+                                    role: "large"
+                            MDButton:
+                                style: "tonal"
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.read_flash()
+                                MDButtonLeadingIcon:
+                                    icon: "memory"
+                                MDButtonText:
+                                    text: "Read"
+                                    font_style: "Label"
+                                    role: "large"
+                            MDButton:
+                                style: "tonal"
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.erase_chip()
+                                MDButtonLeadingIcon:
+                                    icon: "eraser"
+                                MDButtonText:
+                                    text: "Erase"
+                                    font_style: "Label"
+                                    role: "large"
+
+                        # صف 3: Ping + Info + Backup
+                        MDBoxLayout:
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(52)
+                            MDButton:
+                                style: "tonal"
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.ping_device()
+                                MDButtonLeadingIcon:
+                                    icon: "access-point"
+                                MDButtonText:
+                                    text: "Ping"
+                                    font_style: "Label"
+                                    role: "large"
+                            MDButton:
+                                style: "tonal"
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.get_device_info()
+                                MDButtonLeadingIcon:
+                                    icon: "information-outline"
+                                MDButtonText:
+                                    text: "Info"
+                                    font_style: "Label"
+                                    role: "large"
+                            MDButton:
+                                style: "tonal"
+                                size_hint_x: 1
+                                height: dp(52)
+                                radius: [dp(12)]
+                                on_release: app.backup_flash()
+                                MDButtonLeadingIcon:
+                                    icon: "backup-restore"
+                                MDButtonText:
+                                    text: "Backup"
+                                    font_style: "Label"
+                                    role: "large"
+
+                        # بطاقة التقدم
+                        MDCard:
+                            id: progress_card
+                            orientation: "vertical"
+                            padding: dp(14)
+                            spacing: dp(8)
+                            md_bg_color: (0.04, 0.12, 0.09, 1)
+                            radius: [dp(14)]
+                            elevation: 0
+                            line_color: (0, 0.45, 0.28, 1)
+                            line_width: 1
+                            opacity: 0
+                            size_hint_y: None
+                            height: 0
+                            MDBoxLayout:
+                                adaptive_height: True
+                                spacing: dp(8)
+                                MDLabel:
+                                    id: lbl_progress_stage
+                                    text: "جاري..."
+                                    font_style: "Label"
+                                    role: "medium"
+                                    theme_text_color: "Hint"
+                                    adaptive_height: True
+                                MDLabel:
+                                    id: lbl_progress_pct
+                                    text: "0%"
+                                    font_style: "Label"
+                                    role: "large"
+                                    theme_text_color: "Custom"
+                                    text_color: (0, 0.9, 0.55, 1)
+                                    size_hint_x: None
+                                    width: dp(48)
+                                    adaptive_height: True
+                            MDLinearProgressIndicator:
+                                id: progress_bar
+                                value: 0
+                                max: 100
+                                size_hint_x: 1
+                                height: dp(8)
+                                track_color: (0.07, 0.17, 0.12, 1)
+                                indicator_color: (0, 0.9, 0.55, 1)
+
+                        # زر الإطلاق
+                        MDButton:
+                            id: btn_launch
+                            style: "filled"
+                            theme_bg_color: "Custom"
+                            md_bg_color: (0.12, 0.12, 0.12, 1)
+                            size_hint_x: 1
+                            height: dp(60)
+                            disabled: True
+                            radius: [dp(16)]
+                            on_release: app.start_flash()
+                            MDButtonLeadingIcon:
+                                icon: "rocket-launch"
+                                theme_icon_color: "Custom"
+                                icon_color: 1,1,1,1
+                            MDButtonText:
+                                text: "Start Flash"
+                                font_style: "Title"
+                                role: "large"
+                                theme_text_color: "Custom"
+                                text_color: 1,1,1,1
+
+                        # زر الإيقاف
+                        MDButton:
+                            style: "filled"
+                            theme_bg_color: "Custom"
+                            md_bg_color: (0.5, 0.07, 0.12, 1)
+                            size_hint_x: 1
+                            height: dp(48)
+                            radius: [dp(12)]
+                            on_release: app.stop_process()
+                            MDButtonLeadingIcon:
+                                icon: "stop-circle-outline"
+                                theme_icon_color: "Custom"
+                                icon_color: 1,1,1,1
+                            MDButtonText:
+                                text: "Stop Process"
+                                font_style: "Label"
+                                role: "large"
+                                theme_text_color: "Custom"
+                                text_color: 1,1,1,1
+
+                        MDBoxLayout:
+                            size_hint_y: None
+                            height: dp(12)
+
+                MDNavigationBar:
+                    MDNavigationBarItem:
+                        icon: "flash"
+                        text: "العمليات"
+                        on_release: screen_mgr.current = "main"
+                    MDNavigationBarItem:
+                        icon: "console-line"
+                        text: "السجل"
+                        on_release: screen_mgr.current = "logs"
+                    MDNavigationBarItem:
+                        icon: "history"
+                        text: "التاريخ"
+                        on_release:
+                            screen_mgr.current = "history"
+                            app.refresh_history_tab()
+                    MDNavigationBarItem:
+                        icon: "cog-outline"
+                        text: "الإعدادات"
+                        on_release: screen_mgr.current = "settings"
+
+        # ════ شاشة السجل ════════════════════════
+        MDScreen:
+            name: "logs"
+            md_bg_color: (0.03, 0.07, 0.12, 1)
+            MDBoxLayout:
+                orientation: "vertical"
+                MDTopAppBar:
+                    type: "small"
+                    headline_text: "Logs Viewer"
+                    md_bg_color: (0.03, 0.08, 0.14, 1)
+                    specific_text_color: (0, 0.9, 0.55, 1)
+                    MDTopAppBarLeadingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "arrow-right"
+                            theme_icon_color: "Custom"
+                            icon_color: (0, 0.9, 0.55, 1)
+                            on_release: screen_mgr.current = "main"
+                    MDTopAppBarTrailingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "content-save-outline"
+                            theme_icon_color: "Custom"
+                            icon_color: (0.4, 0.75, 1, 1)
+                            on_release: app.save_logs()
+                        MDActionTopAppBarButton:
+                            icon: "trash-can-outline"
+                            theme_icon_color: "Custom"
+                            icon_color: (0.9, 0.3, 0.3, 1)
+                            on_release: app.clear_logs()
+                MDScrollView:
+                    id: log_scroll
+                    do_scroll_x: False
+                    bar_color: (0, 0.8, 0.5, 0.3)
+                    bar_width: 3
+                    MDBoxLayout:
+                        id: log_box
+                        orientation: "vertical"
+                        padding: [dp(14), dp(10)]
+                        spacing: dp(2)
+                        adaptive_height: True
+
+        # ════ شاشة التاريخ ══════════════════════
+        MDScreen:
+            name: "history"
+            md_bg_color: (0.03, 0.07, 0.12, 1)
+            MDBoxLayout:
+                orientation: "vertical"
+                MDTopAppBar:
+                    type: "small"
+                    headline_text: "سجل العمليات"
+                    md_bg_color: (0.03, 0.08, 0.14, 1)
+                    specific_text_color: (0, 0.9, 0.55, 1)
+                    MDTopAppBarLeadingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "arrow-right"
+                            theme_icon_color: "Custom"
+                            icon_color: (0, 0.9, 0.55, 1)
+                            on_release: screen_mgr.current = "main"
+                    MDTopAppBarTrailingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "trash-can-outline"
+                            theme_icon_color: "Custom"
+                            icon_color: (0.9, 0.3, 0.3, 1)
+                            on_release: app.clear_history()
+                MDScrollView:
+                    do_scroll_x: False
+                    MDList:
+                        id: history_list
+                        padding: [dp(12), dp(8)]
+                        spacing: dp(6)
+
+        # ════ شاشة الإعدادات ════════════════════
+        MDScreen:
+            name: "settings"
+            md_bg_color: (0.03, 0.07, 0.12, 1)
+            MDBoxLayout:
+                orientation: "vertical"
+                MDTopAppBar:
+                    type: "small"
+                    headline_text: "الإعدادات"
+                    md_bg_color: (0.03, 0.08, 0.14, 1)
+                    specific_text_color: (0, 0.9, 0.55, 1)
+                    MDTopAppBarLeadingButtonContainer:
+                        MDActionTopAppBarButton:
+                            icon: "arrow-right"
+                            theme_icon_color: "Custom"
+                            icon_color: (0, 0.9, 0.55, 1)
+                            on_release: screen_mgr.current = "main"
+                MDScrollView:
+                    do_scroll_x: False
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        padding: dp(16)
+                        spacing: dp(12)
+                        adaptive_height: True
+
+                        MDCard:
+                            orientation: "vertical"
+                            padding: dp(16)
+                            spacing: dp(10)
+                            adaptive_height: True
+                            md_bg_color: (0.05, 0.1, 0.17, 1)
+                            radius: [dp(14)]
+                            elevation: 0
+                            line_color: (0.1, 0.25, 0.42, 1)
+                            line_width: 1
+                            MDLabel:
+                                text: "Baudrate"
+                                font_style: "Title"
+                                role: "small"
+                                adaptive_height: True
+                            MDBoxLayout:
+                                spacing: dp(6)
+                                size_hint_y: None
+                                height: dp(36)
+                                MDChip:
+                                    text: "9600"
+                                    on_release: app.set_baudrate("9600")
+                                MDChip:
+                                    text: "57600"
+                                    on_release: app.set_baudrate("57600")
+                                MDChip:
+                                    text: "115200"
+                                    on_release: app.set_baudrate("115200")
+                                MDChip:
+                                    text: "921600"
+                                    on_release: app.set_baudrate("921600")
+
+                        MDCard:
+                            orientation: "horizontal"
+                            padding: dp(16)
+                            spacing: dp(12)
+                            adaptive_height: True
+                            md_bg_color: (0.05, 0.1, 0.17, 1)
+                            radius: [dp(14)]
+                            elevation: 0
+                            line_color: (0.1, 0.25, 0.42, 1)
+                            line_width: 1
+                            MDBoxLayout:
+                                orientation: "vertical"
+                                adaptive_height: True
+                                MDLabel:
+                                    text: "إشعار عند الانتهاء"
+                                    font_style: "Title"
+                                    role: "small"
+                                    adaptive_height: True
+                                MDLabel:
+                                    text: "إشعار عند اكتمال الفلاش"
+                                    font_style: "Label"
+                                    role: "small"
+                                    theme_text_color: "Hint"
+                                    adaptive_height: True
+                            MDSwitch:
+                                active: True
+                                size_hint: None, None
+                                size: dp(52), dp(32)
+                                pos_hint: {"center_y": 0.5}
+                                on_active: app.toggle_notify(self.active)
+
+                        MDButton:
+                            style: "tonal"
+                            size_hint_x: 1
+                            height: dp(52)
+                            radius: [dp(12)]
+                            on_release: app.export_config()
+                            MDButtonLeadingIcon:
+                                icon: "export"
+                            MDButtonText:
+                                text: "تصدير الإعدادات"
+                                font_style: "Label"
+                                role: "large"
+
+                        MDBoxLayout:
+                            size_hint_y: None
+                            height: dp(16)

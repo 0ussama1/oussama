@@ -1,1 +1,6 @@
-python3, kivy, kivymd, pyserial, plyer, usb4a, usbserial4a
+kivy==2.3.0
+kivymd==2.0.1.dev0
+pillow
+plyer
+requests
+certifi
