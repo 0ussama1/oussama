@@ -8,18 +8,20 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout Server
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install System Dependencies
+      - name: Fix and Install Dependencies
         run: |
+          sudo apt-get clean
           sudo apt-get update
-          # حل مشكلة libunwind-dev و libgstreamer التي ظهرت في الخطأ
+          # إصلاح التبعيات المكسورة وتثبيت libunwind مسبقاً لمنع خطأ الـ 27 ثانية
+          sudo apt-get install -y -f
+          sudo apt-get install -y libunwind-dev
           sudo apt-get install -y \
             build-essential \
             git \
             python3-dev \
-            ffmpeg \
             libsdl2-dev \
             libsdl2-image-dev \
             libsdl2-mixer-dev \
@@ -32,15 +34,9 @@ jobs:
             libgstreamer1.0-dev \
             gstreamer1.0-plugins-base \
             gstreamer1.0-plugins-good \
-            libunwind-dev \
             libsqlite3-dev \
-            sqlite3 \
-            bzip2 \
-            libbz2-dev \
             libssl-dev \
-            openssl \
             libffi-dev \
-            libgmp-dev \
             liblzma-dev
 
       - name: Set up Python
@@ -54,13 +50,15 @@ jobs:
           pip install Cython==0.29.33
           pip install buildozer
 
-      - name: Build with Buildozer
-        run: yes | buildozer -v android debug
+      - name: Build APK
+        run: |
+          # قبول التراخيص تلقائياً لبدء البناء
+          yes | buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "y"
 
-      - name: Upload APK
+      - name: Upload Result
         uses: actions/upload-artifact@v3
         with:
-          name: Oussama-Boot-v3-Debug
+          name: Oussama-Boot-v3
           path: bin/*.apk
